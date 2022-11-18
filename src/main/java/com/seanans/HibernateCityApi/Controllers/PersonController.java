@@ -50,4 +50,10 @@ public class PersonController {
         log.info("Update Person:{} to name: {}, surname: {}", uuid, person.getName(), person.getSurname());
         return personService.update(uuid, person);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity delete(@PathVariable("id") UUID uuid) {
+        return personService.delete(uuid);
+    }
 }

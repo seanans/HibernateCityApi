@@ -5,18 +5,14 @@ import com.seanans.HibernateCityApi.Repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-@Component
-@Repository
+@Service
 public class PersonService {
     @Autowired
     PersonRepository personRepository;
@@ -62,6 +58,16 @@ public class PersonService {
             personRepository.save(localperson);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity delete(UUID uuid) {
+        if (personRepository.existsById(uuid)) {
+            personRepository.deleteById(uuid);
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
