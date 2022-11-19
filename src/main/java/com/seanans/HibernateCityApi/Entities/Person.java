@@ -4,14 +4,19 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity(name = "Person")
-@Table(name = "Persons")
+@Table(name = "Person")
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID uuid;
-    @Column(name = "name")
+    @Column(nullable = false, updatable = false, name = "id")
+    private UUID id;
+    @Column(name = "name",
+            nullable = false,
+            columnDefinition = "TEXT")
     private String name;
-    @Column(name = "surname")
+    @Column(name = "surname",
+            nullable = false,
+            columnDefinition = "TEXT")
     private String surname;
 
     public Person() {
@@ -22,18 +27,18 @@ public class Person {
         this.surname = surname;
     }
 
-    public Person(UUID uuid, String name, String surname) {
-        this.uuid = uuid;
+    public Person(UUID id, String name, String surname) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getId() {
+        return id;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -55,7 +60,7 @@ public class Person {
     @Override
     public String toString() {
         return "Person{" +
-                "uuid=" + uuid +
+                "uuid=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 '}';

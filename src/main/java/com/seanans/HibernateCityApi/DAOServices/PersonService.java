@@ -10,12 +10,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class PersonService {
     @Autowired
-    PersonRepository personRepository;
+    private PersonRepository personRepository;
+
+    public PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     public List<Person> findAll() {
         List<Person> people = new ArrayList<>();
@@ -28,7 +33,7 @@ public class PersonService {
 
     public ResponseEntity add(Person person) {
         personRepository.save(person);
-        if (personRepository.existsById(person.getUuid())) {
+        if (personRepository.existsById(person.getId())) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -36,35 +41,27 @@ public class PersonService {
 
     }
 
-    public Person findById(UUID uuid) {
-        List<Person> personList = personRepository.findById(uuid).stream().toList();
-        if(!personList.isEmpty()) {
-            Person person = new Person(
-                    personList.get(0).getName(),
-                    personList.get(0).getSurname()
-            );
-            return person;
-        } else {
-            return null;
-        }
-
+    public Optional<Person> findById(UUID id) {
+        return personRepository.findById(id);
     }
 
-    public ResponseEntity update(UUID uuid, Person person) {
-        if (personRepository.existsById(uuid)){
-            Person localperson = personRepository.findById(uuid).stream().toList().get(0);
-            localperson.setName(person.getName());
-            localperson.setSurname(person.getSurname());
-            personRepository.save(localperson);
+    public ResponseEntity update(UUID id, Person person) {
+
+        if (personRepository.existsById(id)){
+            Person localPerson = personRepository.findById(id).get();
+            localPerson.setName(person.getName());
+            localPerson.setSurname(person.getSurname());
+            personRepository.save(localPerson);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
     }
 
-    public ResponseEntity delete(UUID uuid) {
-        if (personRepository.existsById(uuid)) {
-            personRepository.deleteById(uuid);
+    public ResponseEntity delete(UUID id) {
+        if (personRepository.existsById(id)) {
+            personRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         }
         else {

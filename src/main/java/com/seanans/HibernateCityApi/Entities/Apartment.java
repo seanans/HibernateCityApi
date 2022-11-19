@@ -1,17 +1,15 @@
 package com.seanans.HibernateCityApi.Entities;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity(name = "Apartment")
-@Table(name = "Apartments")
+@Table(name = "Apartment")
 public class Apartment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
-    private UUID uuid;
+    @Column(nullable = false, updatable = false, name = "id")
+    private UUID id;
 
     @Column(name = "area",
     nullable = false,
@@ -26,23 +24,22 @@ public class Apartment {
     public Apartment() {
     }
 
-    public Apartment(UUID uuid, long area, String address) {
-        this.uuid = uuid;
-        this.area = area;
-        this.address = address;
-    }
-
     public Apartment(long area, String address) {
         this.area = area;
         this.address = address;
     }
-
-    public UUID getUuid() {
-        return uuid;
+    public Apartment(UUID id, long area, String address) {
+        this.id = id;
+        this.area = area;
+        this.address = address;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public long getArea() {

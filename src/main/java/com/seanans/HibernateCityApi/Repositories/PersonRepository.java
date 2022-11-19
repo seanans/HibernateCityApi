@@ -1,7 +1,6 @@
 package com.seanans.HibernateCityApi.Repositories;
 
 import com.seanans.HibernateCityApi.Entities.Person;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import java.util.UUID;
 
