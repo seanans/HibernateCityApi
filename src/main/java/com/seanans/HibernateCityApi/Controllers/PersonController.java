@@ -2,11 +2,10 @@ package com.seanans.HibernateCityApi.Controllers;
 
 import com.seanans.HibernateCityApi.DAOServices.PersonService;
 import com.seanans.HibernateCityApi.Entities.Person;
-import com.seanans.HibernateCityApi.Repositories.PersonRepository;
+import com.seanans.HibernateCityApi.Entities.TPerson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,15 +40,15 @@ public class PersonController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity insert(@RequestBody() Person person) {
-        log.info("New Person name: {}, surname: {}", person.getName(), person.getSurname());
+    public ResponseEntity insert(@RequestBody() TPerson person) {
+        log.info("New Person name: {}, surname: {}, apartments: {}", person.getName(), person.getSurname(), person.getApartments());
         return personService.add(person);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity update(@PathVariable("id") UUID id,@RequestBody() Person person) {
-        log.info("Update Person: {} to name: {}, surname: {}", id, person.getName(), person.getSurname());
+    public ResponseEntity update(@PathVariable("id") UUID id, @RequestBody() TPerson person) {
+        log.info("Update Person: {} to name: {}, surname: {}, apartments: {}", id, person.getName(), person.getSurname(), person.getApartments());
         return personService.update(id, person);
     }
 
