@@ -1,11 +1,9 @@
-package com.seanans.HibernateCityApi.Entities;
+package com.seanans.HibernateCityApi.DTOs;
 
-import javax.swing.*;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-public class TPerson {
+public class AddPersonDto {
 
     private UUID id;
 
@@ -13,21 +11,21 @@ public class TPerson {
     private String surname;
     private Set<UUID> apartments;
 
-    public TPerson(String name, String surname, Set<UUID> apartments) {
+    public AddPersonDto(String name, String surname, Set<UUID> apartments) {
         this.name = name;
         this.surname = surname;
         this.apartments = apartments;
     }
 
-    public TPerson() {
+    public AddPersonDto() {
     }
 
-    public TPerson(String name, String surname) {
+    public AddPersonDto(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }
 
-    public TPerson(UUID id, String name, String surname, Set<UUID> apartments) {
+    public AddPersonDto(UUID id, String name, String surname, Set<UUID> apartments) {
         this.id = id;
         this.name = name;
         this.surname = surname;

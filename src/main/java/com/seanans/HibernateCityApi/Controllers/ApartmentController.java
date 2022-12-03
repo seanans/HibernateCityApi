@@ -1,8 +1,9 @@
 package com.seanans.HibernateCityApi.Controllers;
 
 import com.seanans.HibernateCityApi.DAOServices.ApartmentService;
+import com.seanans.HibernateCityApi.DTOs.ApartmentDto;
 import com.seanans.HibernateCityApi.Entities.Apartment;
-import com.seanans.HibernateCityApi.Repositories.ApartmentRepository;
+import com.seanans.HibernateCityApi.DTOs.AddApartmentDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class ApartmentController {
 
     @GetMapping("")
     @ResponseBody
-    public List<Apartment> getAll() {
+    public List<ApartmentDto> getAll() {
         log.info("Get All Apartments");
         return apartmentService.findAll();
     }
@@ -34,21 +35,21 @@ public class ApartmentController {
     @GetMapping("/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public Optional<Apartment> findById(@PathVariable("id") UUID id) {
+    public ApartmentDto findById(@PathVariable("id") UUID id) {
         log.info("Get Apartment: {}", id);
         return apartmentService.findById(id);
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity insert(@RequestBody() Apartment apartment) {
-        log.info("New Apartments address: {} , area: {}", apartment.getAddress(), apartment.getArea());
+    public ResponseEntity insert(@RequestBody() AddApartmentDto apartment) {
+        log.info("New Apartments address: {} , area: {}, persons: {}", apartment.getAddress(), apartment.getArea(), apartment.getPersons());
         return apartmentService.add(apartment);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity update(@PathVariable("id") UUID id, @RequestBody() Apartment apartment) {
+    public ResponseEntity update(@PathVariable("id") UUID id, @RequestBody() AddApartmentDto apartment) {
         log.info("Update Apartment: {} to Address: {}, Area: {}", id, apartment.getAddress(), apartment.getArea());
         return apartmentService.update(id, apartment);
     }
@@ -60,4 +61,9 @@ public class ApartmentController {
         return apartmentService.delete(id);
     }
 
+    @DeleteMapping("/all")
+    public void deleteAll() {
+        log.info("Delete all");
+        apartmentService.deleteAll();
+    }
 }

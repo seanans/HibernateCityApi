@@ -22,10 +22,10 @@ public class Person implements Serializable {
             columnDefinition = "TEXT")
     private String surname;
 
-    @ManyToMany(targetEntity = Apartment.class, cascade = { CascadeType.REMOVE })
+    @ManyToMany(targetEntity = Apartment.class, cascade = { CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(name = "persons_apartments",
-    joinColumns = { @JoinColumn(name = "person_id")},
-    inverseJoinColumns = { @JoinColumn(name = "apartment_id")})
+            joinColumns = { @JoinColumn(name = "person_id")},
+            inverseJoinColumns = { @JoinColumn(name = "apartment_id")})
     private Set<Apartment> apartments;
 
     public Person() {

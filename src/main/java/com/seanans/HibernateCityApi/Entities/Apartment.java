@@ -25,8 +25,8 @@ public class Apartment implements Serializable {
     columnDefinition = "TEXT")
     private String address;
 
-    @ManyToMany(mappedBy = "apartments", cascade = { CascadeType.REMOVE })
-    private Set<Person> persons = new HashSet<Person>();
+    @ManyToMany(mappedBy = "apartments", targetEntity = Person.class, fetch = FetchType.EAGER, cascade = { CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE })
+    private Set<Person> persons;
 
     public Apartment() {
     }
@@ -79,4 +79,11 @@ public class Apartment implements Serializable {
         this.address = address;
     }
 
+    public Set<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(Set<Person> persons) {
+        this.persons = persons;
+    }
 }
