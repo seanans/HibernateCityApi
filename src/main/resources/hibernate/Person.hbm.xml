@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="src/main/resources/hibernate">
+    <class name="Person" table="person">
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="name" column="name" />
+        <property name="surname" column="surname" />
+
+        <set name="apartments" table="persons_apartments" cascade="save-update">
+            <key column="id"/>
+            <many-to-many column="person_id" class="Person" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -23,9 +23,6 @@ public class ApartmentService {
     @Autowired
     private PersonRepository personRepository;
 
-    public ApartmentService(ApartmentRepository apartmentRepository) {
-        this.apartmentRepository = apartmentRepository;
-    }
 
     public List<ApartmentDto> findAll() {
         List<ApartmentDto> apartments = new ArrayList<>();
@@ -73,7 +70,7 @@ public class ApartmentService {
                 }
             }
             Apartment apartment = new Apartment(addApartmentDto.getArea(), addApartmentDto.getAddress(), persons);
-            apartmentRepository.save(apartment);
+            apartmentRepository.saveAndFlush(apartment);
             if (apartmentRepository.existsById(apartment.getId())) {
                 return new ResponseEntity<>(HttpStatus.CREATED);
             } else {

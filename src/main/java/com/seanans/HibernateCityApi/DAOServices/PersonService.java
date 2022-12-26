@@ -22,9 +22,6 @@ public class PersonService {
     @Autowired
     ApartmentRepository apartmentRepository;
 
-    public PersonService(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }
 
     public List<PersonDto> findAll() {
         List<PersonDto> people = new ArrayList<>();

@@ -2,7 +2,7 @@ package com.seanans.HibernateCityApi.Entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -11,7 +11,7 @@ import java.util.UUID;
 public class Person implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false, name = "id")
+    @Column(nullable = false, updatable = false, name = "person_id")
     private UUID id;
     @Column(name = "name",
             nullable = false,
@@ -22,11 +22,11 @@ public class Person implements Serializable {
             columnDefinition = "TEXT")
     private String surname;
 
-    @ManyToMany(targetEntity = Apartment.class, cascade = { CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "persons_apartments",
             joinColumns = { @JoinColumn(name = "person_id")},
             inverseJoinColumns = { @JoinColumn(name = "apartment_id")})
-    private Set<Apartment> apartments;
+    private Set<Apartment> apartments = new HashSet<Apartment>(0);
 
     public Person() {
     }
@@ -78,6 +78,7 @@ public class Person implements Serializable {
         this.surname = surname;
         this.apartments = apartments;
     }
+
 
     public Set<Apartment> getApartments() {
         return apartments;

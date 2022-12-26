@@ -1,9 +1,8 @@
 package com.seanans.HibernateCityApi.Controllers;
 
 import com.seanans.HibernateCityApi.DAOServices.ApartmentService;
-import com.seanans.HibernateCityApi.DTOs.ApartmentDto;
-import com.seanans.HibernateCityApi.Entities.Apartment;
 import com.seanans.HibernateCityApi.DTOs.AddApartmentDto;
+import com.seanans.HibernateCityApi.DTOs.ApartmentDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -24,6 +22,10 @@ public class ApartmentController {
 
     @Autowired
     private ApartmentService apartmentService;
+
+    public ApartmentController(ApartmentService apartmentService) {
+        this.apartmentService = apartmentService;
+    }
 
     @GetMapping("")
     @ResponseBody
