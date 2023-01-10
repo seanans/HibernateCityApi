@@ -3,7 +3,6 @@ package com.seanans.HibernateCityApi.Entities;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,7 +11,7 @@ import java.util.UUID;
 public class Apartment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false, name = "id")
+    @Column(nullable = false, updatable = false, name = "apartment_id")
     private UUID id;
 
     @Column(name = "area",
@@ -25,8 +24,11 @@ public class Apartment implements Serializable {
     columnDefinition = "TEXT")
     private String address;
 
-    @ManyToMany(mappedBy = "apartments", cascade = { CascadeType.REMOVE })
-    private Set<Person> persons = new HashSet<Person>();
+    @ManyToMany
+    @JoinTable(name = "persons_apartments",
+            joinColumns = { @JoinColumn(name = "apartment_id")},
+            inverseJoinColumns = { @JoinColumn(name = "person_id")})
+    private Set<Person> persons = new HashSet<Person>(0);
 
     public Apartment() {
     }
@@ -79,4 +81,11 @@ public class Apartment implements Serializable {
         this.address = address;
     }
 
+    public Set<Person> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(Set<Person> persons) {
+        this.persons = persons;
+    }
 }

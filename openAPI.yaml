@@ -1,0 +1,40 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Simple Artist API
+  description: A simple API to illustrate OpenAPI concepts
+
+servers:
+  - url: https://example.io/v1
+
+# Basic authentication
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+security:
+  - BasicAuth: []
+
+paths:
+  /persons:
+         get:
+           description: Returns a list of Persons
+           responses:
+             '200':
+               description: Successfully returned a list of persons
+               content:
+                 application/json:
+                   schema:
+                     type: array
+                     items:
+                       type: object
+                       properties:
+                         id:
+                           type: string
+                           format: uuid
+                         name:
+                           type: string
+                         surname:
+                           type: string
+            
