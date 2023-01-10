@@ -58,7 +58,7 @@ public class ApartmentService {
         return apartments;
     }
 
-    public ResponseEntity add(AddApartmentDto addApartmentDto) {
+    public ResponseEntity<HttpStatus> add(AddApartmentDto addApartmentDto) {
         if (addApartmentDto.getPersons() != null) {
             Set<Person> persons = new HashSet<>();
             Iterable<UUID> personUUID = addApartmentDto.getPersons();
@@ -99,16 +99,15 @@ public class ApartmentService {
             );
             personDtoHelps.add(personDtoHelp);
         }
-        ApartmentDto apartmentDto = new ApartmentDto(
+        return new ApartmentDto(
                 apartmentOptional.get().getId(),
                 apartmentOptional.get().getArea(),
                 apartmentOptional.get().getAddress(),
                 personDtoHelps
         );
-        return apartmentDto;
     }
 
-    public ResponseEntity update(UUID id, AddApartmentDto addApartmentDto) {
+    public ResponseEntity<HttpStatus> update(UUID id, AddApartmentDto addApartmentDto) {
 
         if (apartmentRepository.existsById(id)) {
             Apartment localApartment = apartmentRepository.findById(id).get();
@@ -133,7 +132,7 @@ public class ApartmentService {
         }
     }
 
-    public ResponseEntity delete(UUID id) {
+    public ResponseEntity<HttpStatus> delete(UUID id) {
         if (apartmentRepository.existsById(id)) {
             apartmentRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -142,7 +141,8 @@ public class ApartmentService {
         }
     }
 
-    public void deleteAll(){
+    public ResponseEntity<HttpStatus> deleteAll(){
         apartmentRepository.deleteAll();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

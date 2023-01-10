@@ -23,10 +23,6 @@ public class ApartmentController {
     @Autowired
     private ApartmentService apartmentService;
 
-    public ApartmentController(ApartmentService apartmentService) {
-        this.apartmentService = apartmentService;
-    }
-
     @GetMapping("")
     @ResponseBody
     public List<ApartmentDto> getAll() {
@@ -43,29 +39,33 @@ public class ApartmentController {
     }
 
     @PostMapping("")
+    @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity insert(@RequestBody() AddApartmentDto apartment) {
+    public ResponseEntity<HttpStatus> insert(@RequestBody() AddApartmentDto apartment) {
         log.info("New Apartments address: {} , area: {}, persons: {}", apartment.getAddress(), apartment.getArea(), apartment.getPersons());
         return apartmentService.add(apartment);
     }
 
     @PutMapping("/{id}")
+    @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity update(@PathVariable("id") UUID id, @RequestBody() AddApartmentDto apartment) {
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") UUID id, @RequestBody() AddApartmentDto apartment) {
         log.info("Update Apartment: {} to Address: {}, Area: {}", id, apartment.getAddress(), apartment.getArea());
         return apartmentService.update(id, apartment);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseBody
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity delete(@PathVariable("id") UUID id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") UUID id) {
         log.info("Delete Apartment: {}", id);
         return apartmentService.delete(id);
     }
 
     @DeleteMapping("/all")
-    public void deleteAll() {
+    @ResponseBody
+    public ResponseEntity<HttpStatus> deleteAll() {
         log.info("Delete all");
-        apartmentService.deleteAll();
+        return apartmentService.deleteAll();
     }
 }

@@ -16,11 +16,12 @@ import java.util.*;
 
 @Service
 public class PersonService {
+
     @Autowired
     private PersonRepository personRepository;
 
     @Autowired
-    ApartmentRepository apartmentRepository;
+    private ApartmentRepository apartmentRepository;
 
 
     public List<PersonDto> findAll() {
@@ -57,7 +58,53 @@ public class PersonService {
         return people;
     }
 
-    public ResponseEntity add(AddPersonDto addPersonDto) {
+    public PersonDto findById(UUID id) {
+        Optional<Person> personOptional = personRepository.findById(id);
+        Set<Apartment> apartments = personOptional.get().getApartments();
+        Set<ApartmentDtoHelp> apartmentDtoHelps = new HashSet<>();
+        for (Apartment apartment : apartments) {
+            ApartmentDtoHelp apartmentDtoHelp = new ApartmentDtoHelp(
+                    apartment.getId(),
+                    apartment.getArea(),
+                    apartment.getAddress()
+            );
+            apartmentDtoHelps.add(apartmentDtoHelp);
+        }
+        return new PersonDto(
+                personOptional.get().getId(),
+                personOptional.get().getName(),
+                personOptional.get().getSurname(),
+                apartmentDtoHelps
+        );
+    }
+
+    public List<PersonDto> findByName(String name) {
+        List<Person> personList = personRepository.findByName(name);
+        Set<Person> personSet = new HashSet<>(personList);
+        List<PersonDto> personDtos = new ArrayList<>();
+        for (Person person: personSet) {
+            Set<Apartment> apartments = person.getApartments();
+            Set<ApartmentDtoHelp> apartmentDtoHelps = new HashSet<>();
+            for (Apartment apartment : apartments) {
+                ApartmentDtoHelp apartmentDtoHelp = new ApartmentDtoHelp(
+                        apartment.getId(),
+                        apartment.getArea(),
+                        apartment.getAddress()
+                );
+                apartmentDtoHelps.add(apartmentDtoHelp);
+            }
+            PersonDto personDto = new PersonDto(
+                    person.getId(),
+                    person.getName(),
+                    person.getSurname(),
+                    apartmentDtoHelps
+            );
+            personDtos.add(personDto);
+        }
+        return personDtos;
+    }
+
+    public ResponseEntity<HttpStatus> add(AddPersonDto addPersonDto) {
         if (addPersonDto.getApartments() != null) {
             Set<Apartment> apartments = new HashSet<>();
             Iterable<UUID> apartmentUUID = addPersonDto.getApartments();
@@ -87,27 +134,7 @@ public class PersonService {
 
     }
 
-    public PersonDto findById(UUID id) {
-        Optional<Person> personOptional = personRepository.findById(id);
-        Set<Apartment> apartments = personOptional.get().getApartments();
-        Set<ApartmentDtoHelp> apartmentDtoHelps = new HashSet<>();
-        for (Apartment apartment : apartments) {
-            ApartmentDtoHelp apartmentDtoHelp = new ApartmentDtoHelp(
-                    apartment.getId(),
-                    apartment.getArea(),
-                    apartment.getAddress()
-            );
-            apartmentDtoHelps.add(apartmentDtoHelp);
-        }
-        return new PersonDto(
-                personOptional.get().getId(),
-                personOptional.get().getName(),
-                personOptional.get().getSurname(),
-                apartmentDtoHelps
-        );
-    }
-
-    public ResponseEntity update(UUID id, AddPersonDto addPersonDto) {
+    public ResponseEntity<HttpStatus> update(UUID id, AddPersonDto addPersonDto) {
 
         if (personRepository.existsById(id)) {
             Person localPerson = personRepository.findById(id).get();
@@ -133,7 +160,7 @@ public class PersonService {
 
     }
 
-    public ResponseEntity delete(UUID id) {
+    public ResponseEntity<HttpStatus> delete(UUID id) {
         if (personRepository.existsById(id)) {
             personRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -142,7 +169,7 @@ public class PersonService {
         }
     }
 
-    public ResponseEntity deleteBind(UUID personId, UUID apartmentId) {
+    public ResponseEntity<HttpStatus> deleteBind(UUID personId, UUID apartmentId) {
         if (personRepository.existsById(personId)) {
             Person person = personRepository.findById(personId).get();
             Set<Apartment> apartments = person.getApartments();
@@ -160,7 +187,8 @@ public class PersonService {
         }
     }
 
-    public void deleteAll() {
+    public ResponseEntity<HttpStatus> deleteAll() {
        personRepository.deleteAll();
+       return new ResponseEntity<>(HttpStatus.OK);
     }
 }

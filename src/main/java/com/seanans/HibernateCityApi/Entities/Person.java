@@ -10,7 +10,7 @@ import java.util.UUID;
 @Table(name = "person")
 public class Person implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @Column(nullable = false, updatable = false, name = "person_id")
     private UUID id;
     @Column(name = "name",
